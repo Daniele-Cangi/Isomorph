@@ -267,7 +267,7 @@ This project is in active development. Contributions, bug reports, and feature r
 
 ## License
 
-Research/Educational use. See repository for details.
+Licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE) for details.
 
 ---
 
