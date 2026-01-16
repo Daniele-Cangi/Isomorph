@@ -1,0 +1,11 @@
+# ISOMORPH - Dependencies
+# Python 3.10+ recommended
+
+# Core Scientific Computing
+numpy>=1.21.0
+
+# Symbolic Mathematics (for normal form analysis)
+sympy>=1.10.0
+
+# Visualization
+matplotlib>=3.5.0
