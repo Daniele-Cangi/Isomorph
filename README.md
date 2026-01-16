@@ -244,6 +244,21 @@ pip install -r requirements.txt
 
 ---
 
+## 7. Results Showcase (Chaotic Edge S0.11)
+We successfully stabilized a chaotic edge regime using an octupole sculptor ($k_3 = -10^4$).
+
+**High-Res Poincaré Plot (x=1.70mm):**
+The visualization below shows the **last stable island chain** trapped just before the chaotic cliff. The particle survives 50,000 turns with zero diffusion, protected by the resonance island, while particles at 1.80mm are lost immediately.
+
+![Chaotic Edge Islands](poincare_CHAOTIC_EDGE_k3m1e4_x1.70mm.png)
+
+**Resonance Atlas (Tune Footprint):**
+The frequency map analysis shows the extensive tune shift driven by the sextupoles and "sculpted" by the octupoles to maintain dynamic aperture.
+
+![Resonance Atlas](resonance_atlas_s08.png)
+
+---
+
 ## Contributing
 
 This project is in active development. Contributions, bug reports, and feature requests are welcome via GitHub Issues.
