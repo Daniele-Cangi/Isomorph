@@ -265,6 +265,24 @@ This project is in active development. Contributions, bug reports, and feature r
 
 ---
 
+## Resonance Forensics (S1.0 - S1.2)
+
+We successfully "reverse engineered" the underlying chaotic structure of the "Chaotic Edge" preset ($k_3 = -10^4$) by peeling away layers of phase space distortion.
+
+### 1. Raw Data (S1.0)
+Initially, the Fourier fingerprint of the Poincaré section at $x=1.70$ mm showed a dominant $m=2$ signal. This was an artifact caused by the strong linear tilt ($\alpha_x$) and ellipticity of the beam.
+![Raw](poincare_CHAOTIC_EDGE_k3m1e4_x1.70mm.png)
+
+### 2. Linear Whitening (S1.1)
+After normalizing the coordinates $(x, p_x) \to (X, P_X)$ using Twiss parameters, the $m=2$ signal vanished, revealing a dominant **m=3 (Triangle)** structure. This indicated that the geometric deformation from the strong sextupoles ($k_2=10$) was masking the resonance.
+![Whitened](poincare_CHAOTIC_EDGE_k3m1e4_x1.70mm_white.png)
+
+### 3. Symplectic Normal Form (S1.2)
+Finally, by applying a full 4D Symplectic Normal Form transformation (eigen-decomposition of the one-turn matrix), we decoupled the $x-y$ motion. The true skeleton of the instability was revealed: the **4th Order Resonance ($m=4$)**, confirming that the island chain driving the chaos is indeed $4\nu_x = 1$.
+![Symplectic](poincare_CHAOTIC_EDGE_k3m1e4_x1.70mm_symp.png)
+
+***
+
 ## License
 
 Licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE) for details.

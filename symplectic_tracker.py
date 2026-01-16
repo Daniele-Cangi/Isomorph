@@ -35,6 +35,11 @@ class Element:
     def track(self, s: np.ndarray) -> np.ndarray:
         raise NotImplementedError
 
+    def apply(self, s: np.ndarray, turn: int = 0) -> np.ndarray:
+        # Default alias for backward compatibility. 
+        # Ignores 'turn' unless overridden.
+        return self.track(s)
+
 class Drift6D(Element):
     def __init__(self, L: float):
         self.L = float(L)
@@ -177,25 +182,66 @@ class WormholeCanonicalTranslate(Element):
             x, y, z = (pos + delta_q)
         return np.array([x, px, y, py, z, d], dtype=float)
 
+class ModulatedSextupoleKick(Element):
+    """
+    Thin-lens sextupole kick with quasi-periodic modulation:
+      k2(turn) = k2_base * (1 + eps*cos(omega*turn + phase))
+    """
+    def __init__(self, k2_base: float, eps: float=0.06, omega: float=None, phase: float=0.0):
+        self.k2_base = float(k2_base)
+        self.eps = float(eps)
+        self.omega = float(omega if omega is not None else 2*np.pi*(np.sqrt(5.0)-1.0)/2.0)
+        self.phase = float(phase)
+
+    def apply(self, state, turn: int = 0):
+        # Quasi-periodic modulation
+        k2 = self.k2_base * (1.0 + self.eps * np.cos(self.omega * turn + self.phase))
+        
+        # 6D or 4D state? Wrapper assumes attributes or array
+        # This simple tracker treats state as array usually, let's adapt standard apply
+        has_attr = hasattr(state, 'x')
+        x = state.x if has_attr else state[0]
+        y = state.y if has_attr else state[2]
+        
+        dpx = -(k2 / 2.0) * (x**2 - y**2)
+        dpy =  (k2)       * (x * y)
+        
+        if has_attr:
+            state.px += dpx
+            state.py += dpy
+        else:
+            state[1] += dpx
+            state[3] += dpy
+            
+        return state
+
 class SymplecticTracker6D:
     def __init__(self, elements):
-        self.elements = list(elements)
-
-    def one_turn(self, s):
-        for e in self.elements:
-            s = e.track(s)
+        self.elements = elements
+    
+    def one_turn(self, state_in, turn: int = 0):
+        s = state_in.copy()
+        for elem in self.elements:
+            # Check if element accepts turn argument
+            if hasattr(elem, 'apply') and 'turn' in elem.apply.__code__.co_varnames:
+                s = elem.apply(s, turn=turn)
+            else:
+                s = elem.apply(s)
         return s
-
-    def track(self, s0, n_turns):
-        traj = np.zeros((n_turns, 6), dtype=float)
-        s = np.array(s0, dtype=float)
-        for i in range(n_turns):
+    
+    def track(self, start_state, n_turns):
+        traj = np.zeros((n_turns, 6))
+        s = start_state.copy()
+        traj[0] = s
+        for i in range(1, n_turns):
+            s = self.one_turn(s, turn=i-1) # Turn index 0 for first turn
             traj[i] = s
-            s = self.one_turn(s)
-        return traj
+        return traj, n_turns
 
     def verify_symplectic(self, s_ref, tol=1e-10):
-        def f(x): return self.one_turn(x)
+        # Note: This method assumes one_turn does not depend on 'turn' for Jacobian calculation.
+        # If elements like ModulatedSextupoleKick are present, the Jacobian will be for turn=0.
+        def f(x): return self.one_turn(x, turn=0) # Pass turn=0 for Jacobian
         M = jacobian_fd(f, np.array(s_ref, dtype=float))
         return symplectic_error(M), M
 
