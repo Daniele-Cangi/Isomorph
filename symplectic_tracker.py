@@ -218,15 +218,23 @@ class ModulatedSextupoleKick(Element):
 class SymplecticTracker6D:
     def __init__(self, elements):
         self.elements = elements
-    
+        # Optimization: Pre-check which elements accept 'turn'
+        self._compiled_elements = []
+        for elem in elements:
+            func = elem.apply if hasattr(elem, 'apply') else elem.track
+            # Check arguments
+            import inspect
+            sig = inspect.signature(func)
+            accepts_turn = 'turn' in sig.parameters
+            self._compiled_elements.append((func, accepts_turn))
+            
     def one_turn(self, state_in, turn: int = 0):
         s = state_in.copy()
-        for elem in self.elements:
-            # Check if element accepts turn argument
-            if hasattr(elem, 'apply') and 'turn' in elem.apply.__code__.co_varnames:
-                s = elem.apply(s, turn=turn)
+        for func, accepts_turn in self._compiled_elements:
+            if accepts_turn:
+                s = func(s, turn=turn)
             else:
-                s = elem.apply(s)
+                s = func(s)
         return s
     
     def track(self, start_state, n_turns):

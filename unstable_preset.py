@@ -273,6 +273,7 @@ def escape_time_atlas(tracker, x_range, y_range, n_turns=100000, aperture=5e-3):
     
     print(f"Scanning {len(X)}x{len(Y)} grid for Escape Time...")
     for iy, y0 in enumerate(Y):
+        print(f"  Scanning Row {iy+1}/{len(Y)} (y={y0*1000:.3f}mm)...")
         for ix, x0 in enumerate(X):
             init = PhaseSpaceState(x=x0, px=0.0, y=y0, py=0.0)
             

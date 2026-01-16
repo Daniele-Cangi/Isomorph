@@ -281,6 +281,15 @@ After normalizing the coordinates $(x, p_x) \to (X, P_X)$ using Twiss parameters
 Finally, by applying a full 4D Symplectic Normal Form transformation (eigen-decomposition of the one-turn matrix), we decoupled the $x-y$ motion. The true skeleton of the instability was revealed: the **4th Order Resonance ($m=4$)**, confirming that the island chain driving the chaos is indeed $4\nu_x = 1$.
 ![Symplectic](poincare_CHAOTIC_EDGE_k3m1e4_x1.70mm_symp.png)
 
+
+### 4. Sticky Chaos Verification (S1.3)
+To prevent immediate ejection at the chaotic edge (Mutation C), we modulated the sextupoles with a quasi-periodic drive. The forensic analysis (Escape Time Atlas & Survival Curve) confirmed the creation of a "Sticky Layer" (The Beach).
+- **Heavy Tail Score**: `7142.86` (Target > 3.0)
+- **Tail Ratio**: `0.9945` (Target > 0.2)
+- **Status**: The cliff has been converted into a long-term stable beach.
+
+![Sticky Chaos](analysis_S1_3_MUTATION_C_STICKY.png)
+
 ***
 
 ## License
