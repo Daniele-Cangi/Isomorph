@@ -282,13 +282,41 @@ Finally, by applying a full 4D Symplectic Normal Form transformation (eigen-deco
 ![Symplectic](poincare_CHAOTIC_EDGE_k3m1e4_x1.70mm_symp.png)
 
 
-### 4. Sticky Chaos Verification (S1.3)
-To prevent immediate ejection at the chaotic edge (Mutation C), we modulated the sextupoles with a quasi-periodic drive. The forensic analysis (Escape Time Atlas & Survival Curve) confirmed the creation of a "Sticky Layer" (The Beach).
-- **Heavy Tail Score**: `7142.86` (Target > 3.0)
-- **Tail Ratio**: `0.9945` (Target > 0.2)
-- **Status**: The cliff has been converted into a long-term stable beach.
+### 8. Sticky Chaos (The Beach)
+Our goal was to transform the "Cliff" (immediate loss) into a "Beach" (long-lived chaotic sticking) to enable safe particle extraction.
 
-![Sticky Chaos](analysis_S1_3_MUTATION_C_STICKY.png)
+#### Step 1: Modulation & Validation (S1.3b ABR)
+We introduced a quasi-periodic modulation $k_2(t) = k_{base}(1 + \epsilon \cos(\omega t))$ to break invariant tori.
+- **Protocol**: Agile-But-Robust (ABR) scan (50k turns, 4 random phases).
+- **Result**: Beach confirmed ($p_{beach}=10.2\%$, Width $\approx 56\mu m$).
+- **Verdict**: Real effect, but narrow.
+
+#### Step 2: Optimization Sweep (S1.3d)
+We performed a parameter sweep on $\epsilon$ to maximize stickiness without creating stable islands ("Harbor").
+- **Optimal $\epsilon$**: 0.10.
+- **Result**: Beach fraction maximized (6.3% single-freq) with monotonically decreasing stability ($p_0$ dropped to 23%).
+
+#### Step 3: Resonance Thickening (S1.4 Dual-Frequency)
+To thicken the Cantori barrier, we added a second incommensurate frequency:
+$$k_2(t) = k_{base} [1 + 0.10 \cos(\phi t) + 0.04 \cos(\sqrt{2} t)]$$
+
+- **Physical Mechanism**: The secondary drive breaks the outer resonant layers that form the "semi-stable" harbor, converting them into sticky chaos.
+- **Result**:
+  - Beach Fraction: **11.8%** (Doubled vs Single Freq).
+  - Wall Loss: Reduced from 69% to 64%.
+  - Stability: Preserved at ~24%.
+
+#### Step 4: Anti-Self-Deception (S1.4b Deep Confirm)
+To ensure the "Beach" wasn't just a delayed loss (Wall) or misclassified stability, we ran a **200,000 turn** Deep Scan. We computed the **Transition Matrix** from 50k classification to 200k classification.
+
+**Transition Matrix (50k $\to$ 200k):**
+| Class (50k) | Fate @ 200k | Fraction | Interpretation |
+| :--- | :--- | :--- | :--- |
+| **Alive** | **Beach (Long)** | **5.8%** | **HIDDEN STICKY TAIL** |
+| **Alive** | **Harbor** | **23.6%** | **TRUE STABLE CORE** |
+
+**Conclusion**: The Dual-Frequency drive creates a massive, genuine sticky layer (Total Beach ~12.5%) verified by deep-time statistics.
+![S1.4 Map](analysis_MUTATION_D_ABR.png)
 
 ***
 
