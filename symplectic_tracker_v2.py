@@ -129,14 +129,16 @@ def track_lattice_s1_4(start_state, n_turns, limit_x=5e-3, limit_y=5e-3,
             surv = turn
             break
             
-    return surv
+    return np.array([x, px, y, py, z, d]), surv
 
 class TurboTrackerS1_4:
-    def __init__(self, limit_x=5e-3, limit_y=5e-3, eps1=0.10, eps2=0.04):
+    def __init__(self, limit_x=5e-3, limit_y=5e-3, eps1=0.10, eps2=0.04, omega1=None, omega2=None):
         self.limit_x = limit_x
         self.limit_y = limit_y
         self.eps1 = eps1
         self.eps2 = eps2
+        self.omega1 = omega1
+        self.omega2 = omega2
         self.turn_offset = 0 # Can be set for phase randomization
         
     def track(self, s0, n_turns):
@@ -146,9 +148,10 @@ class TurboTrackerS1_4:
         else:
             arr = np.array(s0)
             
-        surv = track_lattice_s1_4(arr, n_turns, 
+        result = track_lattice_s1_4(arr, n_turns, 
                                   limit_x=self.limit_x, limit_y=self.limit_y,
                                   eps1=self.eps1, eps2=self.eps2,
+                                  omega1=self.omega1, omega2=self.omega2,
                                   phase_offset=self.turn_offset)
                                   
-        return None, surv # Return None for traj to save RAM
+        return result[0], result[1]

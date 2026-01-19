@@ -215,6 +215,49 @@ class ModulatedSextupoleKick(Element):
             
         return state
 
+class DualModulatedSextupoleKick(Element):
+    """
+    Two-frequency quasi-periodic drive:
+      k2(turn) = k2_base * (1 + eps1*cos(w1*t) + eps2*cos(w2*t))
+    """
+    def __init__(self, k2_base: float, eps1: float=0.06, eps2: float=0.04, 
+                 omega1: float=None, omega2: float=None, phase: float=0.0):
+        self.k2_base = float(k2_base)
+        self.eps1 = float(eps1)
+        self.eps2 = float(eps2)
+        
+        # Defaults: w1=Golden, w2=Sqrt(2)
+        if omega1 is None:
+            omega1 = 2*np.pi * (np.sqrt(5.0)-1.0)/2.0
+        if omega2 is None:
+            omega2 = 2*np.pi * np.sqrt(2.0)
+            
+        self.omega1 = float(omega1)
+        self.omega2 = float(omega2)
+        self.phase = float(phase)
+
+    def apply(self, state, turn: int = 0):
+        # Dual-tone modulation
+        mod1 = self.eps1 * np.cos(self.omega1 * turn + self.phase)
+        mod2 = self.eps2 * np.cos(self.omega2 * turn + self.phase)
+        k2 = self.k2_base * (1.0 + mod1 + mod2)
+        
+        has_attr = hasattr(state, 'x')
+        x = state.x if has_attr else state[0]
+        y = state.y if has_attr else state[2]
+        
+        dpx = -(k2 / 2.0) * (x**2 - y**2)
+        dpy =  (k2)       * (x * y)
+        
+        if has_attr:
+            state.px += dpx
+            state.py += dpy
+        else:
+            state[1] += dpx
+            state[3] += dpy
+            
+        return state
+
 class SymplecticTracker6D:
     def __init__(self, elements):
         self.elements = elements
