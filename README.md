@@ -302,7 +302,7 @@ To ensure the "Beach" wasn't just a delayed loss (Wall) or misclassified stabili
 | Class (50k) | Fate @ 200k | Fraction | Interpretation |
 | :--- | :--- | :--- | :--- |
 | **Alive** | **Beach (Long)** | **6.3%** | **HIDDEN STICKY TAIL** |
-| **Alive** | **Harbor** | **23.4%** | **TRUE STABLE CORE** |
+| **Alive (>50k)** | **Harbor (Stable)** | **23.6%** | **TRUE CORE** |
 
 **Conclusion**: The Dual-Frequency drive creates a massive, genuine sticky layer (Total Beach **13.2%**) verified by deep-time statistics and rigorous frequency sweeping (S1.4e).
 ![S1.4 Map](analysis_MUTATION_D_ABR.png)
